@@ -31,6 +31,7 @@ void updateAlarm(bool* alarmStatus, uint16_t* blinkRate, bool* thermalCam, float
           if (max_value >= *MAX_TEMP) {
                 *alarmStatus = 1;
 
+//                OCR1A = 0;
 //                Serial.print("max temp: ");
 //                Serial.println(max_value);
 //                Serial.print("min temp: ");
@@ -42,12 +43,13 @@ void updateAlarm(bool* alarmStatus, uint16_t* blinkRate, bool* thermalCam, float
 ////                Serial.println(" mm");
 
                 // dynamic threshold code start, *MAX_TEMP or *blinkRate
-                if (*distance < 304.8) *blinkRate = 2000; // 1ft 
-                else if (*distance < 609) *blinkRate = 5000; //2ft
-                else if (*distance < 914) *blinkRate = 10000; //3ft
-                else if (*distance < 1219) *blinkRate = 20000; //4ft
-                else if (*distance < 1524) *blinkRate = 40000; //5ft
-                else if (*distance < 1828) *blinkRate = 65000; //6ft
+                  if (*distance < 1828) *blinkRate = 1500;
+//                if (*distance < 304.8) *blinkRate = 2000; // 1ft 
+//                else if (*distance < 609) *blinkRate = 5000; //2ft
+//                else if (*distance < 914) *blinkRate = 10000; //3ft
+//                else if (*distance < 1219) *blinkRate = 20000; //4ft
+//                else if (*distance < 1524) *blinkRate = 40000; //5ft
+//                else if (*distance < 1828) *blinkRate = 65000; //6ft
 //                // if human is less than 3 feet away, blink rapidly
 //                if ((RoundUp((uint16_t)(*distance)) / 304.8) < 3) *blinkRate = 80000;
 //                // if human is more than 3 feet away, blink slowly
@@ -55,12 +57,12 @@ void updateAlarm(bool* alarmStatus, uint16_t* blinkRate, bool* thermalCam, float
 //                Serial.print("blink rate: ");
 //                Serial.println(*blinkRate);
                 
-                if (OCR1A == 0 || OCR1A - 1000 > *blinkRate || OCR1A + 1000 < *blinkRate) {
+                if (OCR1A == 0 || OCR1A - 1000 > *blinkRate || OCR1A + 1000 < *blinkRate || 1) {
                     OCR1A = *blinkRate; // person detected, update blinkRate based on distance
                 }
                 return;
             }
-          // if person not detected
+          // if person not detected, if temp not high enough
           if (!(*alarmStatus)) {
               stop_timer();
               *state = TIMER_STATE_HALT;
