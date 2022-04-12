@@ -4,6 +4,7 @@
 #include "tof.h"
 
 const int ALARM_LED = PD7; // 
+const int BUZZER_PIN = 2;
 #define OFFSET 12
 #define HUMAN_TEMP 37
 

@@ -29,6 +29,7 @@ void updateAlarm(bool* alarmStatus, uint16_t* blinkRate, bool* thermalCam, float
 //          Serial.println(max_value);
           // if the maximum of 64 pixels is greater than maximum threshold (target above ambient temp), flash LED
           if (max_value >= *MAX_TEMP) {
+                tone(BUZZER_PIN, 1000);
                 *alarmStatus = 1;
 
 //                OCR1A = 0;
@@ -43,7 +44,7 @@ void updateAlarm(bool* alarmStatus, uint16_t* blinkRate, bool* thermalCam, float
 ////                Serial.println(" mm");
 
                 // dynamic threshold code start, *MAX_TEMP or *blinkRate
-                  if (*distance < 1828) *blinkRate = 1500;
+                  if (*distance < 1828) *blinkRate = 2000;
 //                if (*distance < 304.8) *blinkRate = 2000; // 1ft 
 //                else if (*distance < 609) *blinkRate = 5000; //2ft
 //                else if (*distance < 914) *blinkRate = 10000; //3ft
@@ -64,6 +65,7 @@ void updateAlarm(bool* alarmStatus, uint16_t* blinkRate, bool* thermalCam, float
             }
           // if person not detected, if temp not high enough
           if (!(*alarmStatus)) {
+              noTone(BUZZER_PIN);
               stop_timer();
               *state = TIMER_STATE_HALT;
           }
